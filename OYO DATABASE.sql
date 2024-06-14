@@ -1,13 +1,13 @@
 create database OYO;
 USE OYO;
-
+-- MADE BY ARCHIE
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     user_name VARCHAR(100),
     email VARCHAR(100) UNIQUE,
     user_password VARCHAR(255)
 );
-
+-- MADE BY ARCHIE
 CREATE TABLE Admins  (
     admin_id INT AUTO_INCREMENT PRIMARY KEY,
     admin_name VARCHAR(100),

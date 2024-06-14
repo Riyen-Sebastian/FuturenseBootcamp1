@@ -15,6 +15,7 @@ CREATE TABLE Admins  (
     admin_password VARCHAR(255)
 );
 
+-- MADE BY SCHOLAR
 CREATE TABLE Hotel (
     HotelID INT PRIMARY KEY,
     HotelName VARCHAR(50) NOT NULL,
@@ -25,7 +26,7 @@ CREATE TABLE Hotel (
     ZipCode VARCHAR(10) NOT NULL,
     PhoneNumber VARCHAR(20) NOT NULL
 );
-
+-- MADE BY SCHOLAR
 -- Create the Rooms table
 CREATE TABLE Rooms (
     RoomID INT PRIMARY KEY,

@@ -71,7 +71,7 @@ CREATE TABLE Employee (
     FOREIGN KEY ( HotelID) REFERENCES Hotel( HotelID)
 );
 
---made by Riyen
+--Made by Satyam
 CREATE TABLE Service_Employee (
     service_id INT,
     employee_id INT,

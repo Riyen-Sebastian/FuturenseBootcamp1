@@ -60,7 +60,7 @@ CREATE TABLE Service (
     price DECIMAL(10, 2),
     FOREIGN KEY ( HotelID) REFERENCES Hotel( HotelID)
 );
-
+--Made By Satyam
 CREATE TABLE Employee (
     employee_id INT AUTO_INCREMENT PRIMARY KEY,
      HotelID INT,

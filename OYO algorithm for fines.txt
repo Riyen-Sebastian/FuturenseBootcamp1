@@ -1,0 +1,33 @@
+ALGORITHM FOR CALCULATING OYO FINES AND PENALTIES:
+1. Connect to the MySQL database
+2. Use the correct database (e.g., USE oyo_db;)
+3. Define the tables involved (e.g., bookings, hotels)
+4. Identify the columns needed for the calculation (e.g., check_in_date, check_out_date, actual_checkout_date)
+5. Construct the SQL query using a SELECT statement
+   5.1. Join the necessary tables (e.g., bookings INNER JOIN hotels)
+   5.2. Specify the columns to retrieve (e.g., hotel_name, check_in_date, check_out_date, actual_checkout_date)
+   5.3. Add any necessary filters or conditions using the WHERE clause
+   5.4. Include a CASE statement to calculate the fine or penalty
+        CASE
+            WHEN actual_checkout_date > check_out_date THEN (DATEDIFF(actual_checkout_date, check_out_date) * penalty_per_day)
+            ELSE 0
+        END AS late_checkout_penalty
+   5.5. Include any sorting or ordering using the ORDER BY clause
+6. Execute the SQL query
+7. Process and display the calculated OYO fines or penalties
+
+EXAMPLE CODE:
+USE oyo_db;
+SELECT
+    h.hotel_name,
+    b.check_in_date,
+    b.check_out_date,
+    b.actual_checkout_date,
+    CASE
+        WHEN b.actual_checkout_date > b.check_out_date THEN (DATEDIFF(b.actual_checkout_date, b.check_out_date) * 500) -- $500 per day late checkout penalty
+        ELSE 0
+    END AS late_checkout_penalty
+FROM bookings b
+INNER JOIN hotels h ON b.hotel_id = h.hotel_id
+WHERE b.actual_checkout_date > b.check_out_date
+ORDER BY late_checkout_penalty DESC;

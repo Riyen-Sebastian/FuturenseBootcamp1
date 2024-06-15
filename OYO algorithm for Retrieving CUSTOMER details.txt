@@ -1,0 +1,37 @@
+ALGORITHM FOR RETRIEVING OYO EMPLOYEE DETAILS:
+1. Connect to the MySQL database
+2. Use the correct database (e.g., USE oyo_db;)
+3. Define the columns to be retrieved from the employee table
+4. Construct the SQL query using the SELECT statement
+   4.1. Specify the columns to retrieve (e.g., first_name, last_name, email, hire_date, department)
+   4.2. Include the FROM clause with the table name (e.g., FROM employees)
+   4.3. Add any necessary filters or conditions using the WHERE clause (e.g., department = 'Operations')
+   4.4. Include any sorting or ordering using the ORDER BY clause (e.g., ORDER BY hire_date DESC)
+5. Execute the SQL query
+6. Process and display the retrieved OYO employee details
+
+EXAMPLE CODE:
+USE oyo_db;
+SELECT first_name, last_name, email, hire_date, department
+FROM employees
+WHERE department = 'Operations'
+ORDER BY hire_date DESC;
+
+ALGORITHM FOR RETRIEVING OYO EMPLOYEE DETAILS:
+1. Connect to the MySQL database
+2. Use the correct database (e.g., USE oyo_db;)
+3. Define the columns to be retrieved from the employee table
+4. Construct the SQL query using the SELECT statement
+   4.1. Specify the columns to retrieve (e.g., first_name, last_name, email, hire_date, department)
+   4.2. Include the FROM clause with the table name (e.g., FROM employees)
+   4.3. Add any necessary filters or conditions using the WHERE clause (e.g., department = 'Operations')
+   4.4. Include any sorting or ordering using the ORDER BY clause (e.g., ORDER BY hire_date DESC)
+5. Execute the SQL query
+6. Process and display the retrieved OYO employee details
+
+EXAMPLE CODE:
+USE oyo_db;
+SELECT first_name, last_name, email, hire_date, department
+FROM employees
+WHERE department = 'Operations'
+ORDER BY hire_date DESC;

@@ -1,13 +1,13 @@
 create database OYO;
 USE OYO;
-
+-- MADE BY ARCHIE
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     user_name VARCHAR(100),
     email VARCHAR(100) UNIQUE,
     user_password VARCHAR(255)
 );
-
+-- MADE BY ARCHIE
 CREATE TABLE Admins  (
     admin_id INT AUTO_INCREMENT PRIMARY KEY,
     admin_name VARCHAR(100),
@@ -71,11 +71,36 @@ CREATE TABLE Employee (
     FOREIGN KEY ( HotelID) REFERENCES Hotel( HotelID)
 );
 
---made by Riyen
+--Made by Satyam
 CREATE TABLE Service_Employee (
     service_id INT,
     employee_id INT,
     PRIMARY KEY (service_id, employee_id),
     FOREIGN KEY (service_id) REFERENCES Service(service_id),
     FOREIGN KEY (employee_id) REFERENCES Employee(employee_id)
+);
+
+
+
+
+-- Bookings Table by Yashasvi Singh
+CREATE TABLE Bookings (
+    booking_id INT PRIMARY KEY ,
+    user_id INT,
+    room_id INT,
+    check_in DATE NOT NULL,
+    check_out DATE NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (room_id) REFERENCES Rooms(room_id)
+);
+
+-- Payments Table by Yashasvi Singh
+CREATE TABLE Payments (
+    payment_id INT PRIMARY KEY,
+    booking_id INT,
+    amount DECIMAL(10, 2) NOT NULL,
+    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    payment_method VARCHAR(50) NOT NULL,
+    FOREIGN KEY (booking_id) REFERENCES Bookings(booking_id)
 );

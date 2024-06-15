@@ -40,7 +40,7 @@ CREATE TABLE Rooms (
 
 
 
---made by Riyen
+-- Made by Riyen
 CREATE TABLE Review (
     review_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -52,7 +52,7 @@ CREATE TABLE Review (
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
     FOREIGN KEY ( HotelID) REFERENCES Hotel( HotelID)
 );
---made by Riyen
+-- Made by Riyen
 CREATE TABLE Service (
     service_id INT AUTO_INCREMENT PRIMARY KEY,
      HotelID INT,
@@ -61,7 +61,7 @@ CREATE TABLE Service (
     price DECIMAL(10, 2),
     FOREIGN KEY ( HotelID) REFERENCES Hotel( HotelID)
 );
---Made By Satyam
+-- Made By Satyam
 CREATE TABLE Employee (
     employee_id INT AUTO_INCREMENT PRIMARY KEY,
      HotelID INT,
@@ -71,7 +71,7 @@ CREATE TABLE Employee (
     FOREIGN KEY ( HotelID) REFERENCES Hotel( HotelID)
 );
 
---Made by Satyam
+-- Made by Satyam
 CREATE TABLE Service_Employee (
     service_id INT,
     employee_id INT,
@@ -102,5 +102,15 @@ CREATE TABLE Payments (
     amount DECIMAL(10, 2) NOT NULL,
     payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     payment_method VARCHAR(50) NOT NULL,
+    FOREIGN KEY (booking_id) REFERENCES Bookings(booking_id)
+);
+-- Made by Riyen
+CREATE TABLE Service_Avail (
+    service_avail_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    service_id INT NOT NULL,
+    booking_id INT,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (service_id) REFERENCES Service(service_id),
     FOREIGN KEY (booking_id) REFERENCES Bookings(booking_id)
 );

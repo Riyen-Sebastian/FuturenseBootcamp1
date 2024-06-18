@@ -215,3 +215,10 @@ INSERT INTO Service_Avail (user_id, service_id, booking_id) VALUES
 (3, 3, 3),
 (4, 4, 4),
 (5, 5, 5);
+
+ALTER TABLE Review
+MODIFY COLUMN review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE Payments DROP PRIMARY KEY;
+ALTER TABLE Payments MODIFY COLUMN  payment_id INT AUTO_INCREMENT PRIMARY KEY;
+

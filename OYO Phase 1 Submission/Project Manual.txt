@@ -1,1 +1,108 @@
+# OYO Project User Guide
+
+Welcome to the OYO project! This guide will help you navigate and use the OYO hotel and room management system.
+
+
+## Accessing the System
+
+1.Open your preferred database management tool:This could be a graphical tool like MySQL Workbench, SSMS (SQL Server Management Studio), or pgAdmin (for PostgreSQL), or a command-line tool like MySQL, SQL Server, or PostgreSQL.
+
+2.Connect to the OYO database: Enter the required credentials (username, password, and database server details) to establish a connection with the OYO database.
+
+
+
+                                   ##### Managing Hotels #####
+
+
+### View All Hotels
+
+---To view a list of all hotels in the system, execute the following SQL query:
+
+
+SELECT * FROM Hotel;
+
+
+---This will display the details of all hotels, including the hotel ID, name, address, city, state, country, zip code, and phone number.
+
+
+
+### Add a New Hotel
+
+---To add a new hotel to the system, execute the following SQL query:
+
+
+INSERT INTO Hotel (HotelID, HotelName, HotelAddress, City, State, Country, ZipCode, PhoneNumber)
+VALUES (
+    [HotelID],
+    '[HotelName]',
+    '[HotelAddress]',
+    '[City]',
+    '[State]',
+    '[Country]',
+    '[ZipCode]',
+    '[PhoneNumber]'
+);
+
+
+---Replace the placeholders (`[HotelID]`, `'[HotelName]'`, etc.) with the appropriate values for the new hotel.
+
+
+
+                                       #### Managing Rooms  ####
+
+### View All Rooms
+
+---To view a list of all rooms in the system, execute the following SQL query:
+
+
+SELECT * FROM Rooms;
+
+
+---This will display the details of all rooms, including the room ID, hotel ID, room type, room rate, and availability status.
+
+
+
+
+
+### View Rooms for a Specific Hotel
+
+---To view the rooms associated with a specific hotel, execute the following SQL query:
+
+
+SELECT * FROM Rooms WHERE HotelID = [HotelID];
+
+---Replace `[HotelID]` with the ID of the hotel you want to view rooms for.
+
+
+
+
+
+
+### Add a New Room
+
+---To add a new room to the system, execute the following SQL query:
+
+
+INSERT INTO Rooms (RoomID, HotelID, RoomType, RoomRate, IsAvailable)
+VALUES (
+    [RoomID],
+    [HotelID],
+    '[RoomType]',
+    [RoomRate],
+    [IsAvailable]
+);
+
+
+---Replace the placeholders (`[RoomID]`, `[HotelID]`, `'[RoomType]'`, `[RoomRate]`, and `[IsAvailable]`) with the appropriate values for the new room. Make sure to use an existing `HotelID` value from the `Hotel` table.
+
+
+
+
+
+
+
+## Additional Features
+
+-Update Hotel/Room Information:You can use the `UPDATE` statement to modify the details of existing hotels or rooms.
+-Delete Hotels/Rooms:You can use the `DELETE` statement to remove hotels or rooms from the system.
 

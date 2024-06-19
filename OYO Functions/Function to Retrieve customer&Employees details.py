@@ -1,6 +1,5 @@
 import mysql.connector
 from mysql.connector import Error
-from datetime import datetime
 
 def create_connection():
     """
@@ -19,9 +18,9 @@ def create_connection():
         print(f"Error: {e}")
         return None
 
-def calculate_fines_penalties(query_type):
+def retrieve_data(query_type):
     """
-    Calculates fines or penalties based on the given query type.
+    Retrieves employee or user details from the OYO database.
     """
     # Create a connection to the database
     connection = create_connection()
@@ -35,25 +34,26 @@ def calculate_fines_penalties(query_type):
         cursor = connection.cursor()
 
         # Execute the appropriate SQL query based on the query_type
-        if query_type == "late_checkout":
+        if query_type == "employees":
             query = """
-                SELECT b.booking_id, h.HotelName, b.check_in, b.check_out, b.actual_checkout,
-                       CASE
-                           WHEN b.actual_checkout > b.check_out THEN DATEDIFF(b.actual_checkout, b.check_out) * 500
-                           ELSE 0
-                       END AS late_checkout_penalty
-                FROM Bookings b
-                JOIN Hotel h ON b.RoomID = h.HotelID
-                WHERE b.actual_checkout> b.check_out;
+                SELECT employee_id, employee_name, employee_role, contact_info
+                FROM Employee
+                ORDER BY employee_id;
+            """
+        elif query_type == "users":
+            query = """
+                SELECT user_name, user_id, email
+                FROM users
+                ORDER BY user_name ASC;
             """
         else:
-            print("Invalid query type. Please use 'late_checkout'.")
+            print("Invalid query type. Please use 'employees' or 'users'.")
             return
 
         cursor.execute(query)
         results = cursor.fetchall()
 
-        # Print the calculated fines or penalties
+        # Print the retrieved data
         for row in results:
             print(row)
 
@@ -67,4 +67,5 @@ def calculate_fines_penalties(query_type):
             print("Connection closed")
 
 # Example usage
-calculate_fines_penalties("late_checkout")
+retrieve_data("employees")
+retrieve_data("users")

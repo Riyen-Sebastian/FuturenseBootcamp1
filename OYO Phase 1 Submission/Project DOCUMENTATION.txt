@@ -1,0 +1,201 @@
+# OYO Project User Guide
+
+Welcome to the OYO project! This guide will help you navigate and use the OYO hotel and room management system.
+
+
+## Accessing the System
+
+1.Open your preferred database management tool:This could be a graphical tool like MySQL Workbench, SSMS (SQL Server Management Studio), or pgAdmin (for PostgreSQL), or a command-line tool like MySQL, SQL Server, or PostgreSQL.
+
+2.Connect to the OYO database: Enter the required credentials (username, password, and database server details) to establish a connection with the OYO database.
+
+
+
+                                   ##### Managing Hotels #####
+
+
+### View All Hotels
+
+---To view a list of all hotels in the system, execute the following SQL query:
+
+
+SELECT * FROM Hotel;
+
+
+---This will display the details of all hotels, including the hotel ID, name, address, city, state, country, zip code, and phone number.
+
+
+
+### Add a New Hotel
+
+---To add a new hotel to the system, execute the following SQL query:
+
+
+INSERT INTO Hotel (HotelID, HotelName, HotelAddress, City, State, Country, ZipCode, PhoneNumber)
+VALUES (
+    [HotelID],
+    '[HotelName]',
+    '[HotelAddress]',
+    '[City]',
+    '[State]',
+    '[Country]',
+    '[ZipCode]',
+    '[PhoneNumber]'
+);
+
+
+---Replace the placeholders (`[HotelID]`, `'[HotelName]'`, etc.) with the appropriate values for the new hotel.
+
+
+
+                                       #### Managing Rooms  ####
+
+### View All Rooms
+
+---To view a list of all rooms in the system, execute the following SQL query:
+
+
+SELECT * FROM Rooms;
+
+
+---This will display the details of all rooms, including the room ID, hotel ID, room type, room rate, and availability status.
+
+
+
+
+
+### View Rooms for a Specific Hotel
+
+---To view the rooms associated with a specific hotel, execute the following SQL query:
+
+
+SELECT * FROM Rooms WHERE HotelID = [HotelID];
+
+---Replace `[HotelID]` with the ID of the hotel you want to view rooms for.
+
+
+
+
+
+
+### Add a New Room
+
+---To add a new room to the system, execute the following SQL query:
+
+
+INSERT INTO Rooms (RoomID, HotelID, RoomType, RoomRate, IsAvailable)
+VALUES (
+    [RoomID],
+    [HotelID],
+    '[RoomType]',
+    [RoomRate],
+    [IsAvailable]
+);
+
+
+---Replace the placeholders (`[RoomID]`, `[HotelID]`, `'[RoomType]'`, `[RoomRate]`, and `[IsAvailable]`) with the appropriate values for the new room. Make sure to use an existing `HotelID` value from the `Hotel` table.
+
+
+
+
+
+                                         ### Booking a Room ###
+
+To book a room in the OYO hotel system, follow these steps:
+
+1.View Available Hotels:
+   To see a list of all available hotels, execute the following SQL query:
+
+
+   SELECT * FROM Hotel;
+
+
+--This will display the details of all hotels, including the hotel ID, name, address, city, state, country, zip code, and phone number.
+
+
+
+2.View Available Rooms for a Specific Hotel:
+   Once you have identified the hotel you want to stay at, execute the following SQL query to see the available rooms:
+
+
+   SELECT * FROM Rooms WHERE HotelID = [HotelID] AND IsAvailable = 1;
+
+
+   Replace `[HotelID]` with the ID of the hotel you selected. This query will show you all the available rooms for that hotel, along with their room ID, room type, and room rate.
+
+
+
+3.Book a Room:
+   To book a room, execute the following SQL query:
+
+   
+   UPDATE Rooms
+   SET IsAvailable = 0
+   WHERE RoomID = [RoomID];
+   
+
+   Replace `[RoomID]` with the ID of the room you want to book. This query will update the `IsAvailable` column for that room to `0`, marking it as booked.
+
+
+
+4.Confirm Booking:
+   To confirm your booking, execute the following SQL query:
+
+   SELECT * FROM Rooms WHERE RoomID = [RoomID];
+   
+
+   Replace `[RoomID]` with the ID of the room you booked. This query will show you the details of the booked room, including the hotel ID, room type, and room rate.
+
+
+
+                                    ### Canceling a Booking ###
+
+
+If you need to cancel a booking, follow these steps:
+
+
+
+1.Find the Booked Room:
+   Execute the following SQL query to retrieve the details of your booked room:
+
+
+   SELECT * FROM Rooms WHERE IsAvailable = 0 AND HotelID = [HotelID];
+
+
+   Replace `[HotelID]` with the ID of the hotel where you booked the room. This query will show you all the booked rooms for that hotel.
+
+
+
+2.Cancel the Booking:
+   To cancel your booking, execute the following SQL query:
+
+   
+
+   UPDATE Rooms
+   SET IsAvailable = 1
+   WHERE RoomID = [RoomID];
+   
+
+   Replace `[RoomID]` with the ID of the room you want to cancel. This query will update the `IsAvailable` column for that room to `1`, marking it as available again.
+
+3.Confirm Cancellation:
+   To confirm the cancellation, execute the following SQL query:
+
+
+   SELECT * FROM Rooms WHERE RoomID = [RoomID];
+
+
+   Replace `[RoomID]` with the ID of the room you canceled. This query will show you the details of the room, and the `IsAvailable` column should now be `1`.
+
+Remember to replace the placeholders (`[HotelID]`, `[RoomID]`, etc.) with the appropriate values based on your booking details.
+
+For any further assistance or inquiries, please contact our customer support team.
+
+
+
+
+                              ## Additional Features ##
+
+-Update Hotel/Room Information:You can use the `UPDATE` statement to modify the details of existing hotels or rooms.
+-Delete Hotels/Rooms:You can use the `DELETE` statement to remove hotels or rooms from the system.
+

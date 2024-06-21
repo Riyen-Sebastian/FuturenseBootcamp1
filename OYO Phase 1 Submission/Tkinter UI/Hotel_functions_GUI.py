@@ -184,7 +184,7 @@ def create_and_run_gui():
     def book_hotel():
         selected_hotel = hotel_list.curselection()
         if selected_hotel:
-            hotel_id = hotel_list.get(selected_hotel)[0]  # Assuming the hotel ID is the first field in the tuple
+            hotel_id = hotel_list.get(selected_hotel)[12]  # Assuming the hotel ID is the first field in the tuple
             available_rooms = get_available_rooms_by_hotel_id(hotel_id)
             booking_window = tk.Toplevel(root)
             booking_window.title("Book Hotel")
@@ -269,7 +269,7 @@ def create_and_run_gui():
             def book_amenity_gui():
                 selected_amenity = amenity_list.curselection()
                 if selected_amenity:
-                    service_id = amenity_list.get(selected_amenity)[0]  # Assuming the service ID is the first field in the tuple
+                    service_id = int(str(amenity_list.get(selected_amenity)[15])+str(amenity_list.get(selected_amenity)[16]))# Assuming the service ID is the first field in the tuple
                     result = book_amenity(int(user_id_entry.get()), service_id)
                     messagebox.showinfo("Booking Result", result)
                 else:

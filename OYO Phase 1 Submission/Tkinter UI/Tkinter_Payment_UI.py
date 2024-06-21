@@ -1,6 +1,45 @@
 import tkinter as tk
 from tkinter import messagebox
+from Database_connect import *
 
+def process_payment(booking_id, amount):
+    """
+    This function processes a payment for a booking.
+
+    :param booking_id: The ID of the booking to process payment for.
+    :param amount: The amount to be paid.
+    :return: Payment confirmation message.
+    """
+    connection = create_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+            # Step 1: Create a new payment entry in the database
+            payment_query = """
+            INSERT INTO Payments(booking_id, amount,payment_method) 
+            VALUES (%s, %s, 'E-Wallet')
+            """
+            cursor.execute(payment_query, (booking_id, amount))
+            
+            # Step 2: Update the booking status to 'Paid'
+            update_booking_query = """
+            UPDATE Bookings 
+            SET status = 'Paid' 
+            WHERE booking_id = %s
+            """
+            cursor.execute(update_booking_query, (booking_id,))
+            
+            # Commit the transaction
+            connection.commit()
+            return "Payment processed successfully"
+        except Error as e:
+            print(f"Error: {e}")
+            return "Error processing the payment"
+        finally:
+            cursor.close()
+            connection.close()
+    else:
+        return "Connection failed"
 class PaymentApp:
     def __init__(self, root):
         self.root = root

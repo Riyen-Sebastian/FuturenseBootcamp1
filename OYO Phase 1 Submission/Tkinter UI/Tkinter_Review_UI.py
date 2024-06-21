@@ -1,5 +1,40 @@
 import tkinter as tk
 from tkinter import messagebox
+from Database_connect import *
+
+def add_review(user_id, HotelID, rating, comment, complaint=None):
+    """
+    This function adds a review for a specific booking.
+
+    :param user_id: The ID of the user adding the review.
+    :param hotel_id: The ID of the hotel being reviewed.
+    :param rating: The rating given by the user (e.g., 1 to 5 stars).
+    :param comment: The comment provided by the user.
+    :param complaint: Optional complaint provided by the user.
+    :return: Confirmation message.
+    """
+    connection = create_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+            # Insert the review into the Review table
+            review_query = """
+            INSERT INTO Review (user_id, HotelID, rating, comment, complaint) 
+            VALUES (%s, %s, %s, %s, %s)
+            """
+            cursor.execute(review_query, (user_id, HotelID, rating, comment, complaint))
+            
+            # Commit the transaction
+            connection.commit()
+            return "Review added successfully"
+        except Error as e:
+            print(f"Error: {e}")
+            return "Error adding the review"
+        finally:
+            cursor.close()
+            connection.close()
+    else:
+        return "Connection failed"
 
 class ReviewApp:
     def __init__(self, root):
@@ -44,7 +79,8 @@ class ReviewApp:
             messagebox.showinfo("Result", result)
         else:
             messagebox.showwarning("Input Error", "All fields except complaint are required")
-
+    
+    
 if __name__ == "__main__":
     root = tk.Tk()
     app = ReviewApp(root)

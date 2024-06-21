@@ -1,24 +1,9 @@
 import mysql.connector
 from mysql.connector import Error
 
-def create_connection():
-    """
-    Creates and returns a connection to the MySQL database.
-    """
-    try:
-        connection = mysql.connector.connect(
-            host='localhost',
-            database='OYO',
-            user='root',
-            password='mysqlpass'
-        )
-        if connection.is_connected():
-            return connection
-    except Error as e:
-        print(f"Error: {e}")
-        return None
+from Database_connect import *
 
-    
+
 #Function to search for Hotels by City
 def search_hotels(location):
     """
@@ -174,6 +159,7 @@ import datetime
 root = tk.Tk()
 root.title("Hotel Booking System")
 
+
 # Function to search for hotels and display available rooms
 def search_hotels_gui():
     location = location_entry.get()
@@ -184,10 +170,10 @@ def search_hotels_gui():
             hotel_list.insert(tk.END, hotel)
     else:
         messagebox.showinfo("No Hotels Found", f"No hotels found in {location}.")
+        
 def get_available_rooms(hotel_id):
-    """
+    """d
     Retrieves a list of available rooms for a specific hotel.
-
     :param hotel_id: The ID of the hotel to get available rooms for.
     :return: List of available room IDs and room types.
     """
@@ -200,20 +186,23 @@ def get_available_rooms(hotel_id):
                 FROM Rooms
                 WHERE HotelID = %s AND IsAvailable = 1
             """
+            print(f"Executing query: {query}")
+            print(f"With hotel_id: {hotel_id}")
             cursor.execute(query, (hotel_id,))
             available_rooms = cursor.fetchall()
+            print(f"Query result: {available_rooms}")
             return available_rooms
         except Error as e:
             print(f"Error: {e}")
             return []
         finally:
-            cursor.close()
-            connection.close()
+            if cursor:
+                cursor.close()
+            if connection.is_connected():
+                connection.close()
+                print("Database connection closed.")
     else:
-        return []
-
-# Example usage:
-# print(get_available_rooms(1))
+        return []        
 
 # Function to proceed to the booking page
 def book_hotel():
@@ -309,7 +298,7 @@ def book_hotel():
             selected_amenity = amenity_list.curselection()
             if selected_amenity:
                 service_id = amenity_list.get(selected_amenity)[0]  # Assuming the service ID is the first field in the tuple
-                result = book_amenity(int(user_id_entry.get()), service_id, booking_id)
+                result = book_amenity(int(user_id_entry.get()), service_id, booking_id_entry.get())
                 messagebox.showinfo("Booking Result", result)
             else:
                 messagebox.showwarning("No Amenity Selected", "Please select an amenity from the list.")

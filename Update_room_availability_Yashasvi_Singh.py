@@ -1,3 +1,5 @@
+
+from Database_connect import *
 def update_room_availability(room_id, availability):
     """
     Updates the availability of a room.

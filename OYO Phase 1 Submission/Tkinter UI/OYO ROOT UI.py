@@ -9,6 +9,8 @@ from Database_connect import *
 from mysql.connector import Error
 from Tkinter_Review_UI import ReviewApp
 
+from Update_hotel_details_and_to_add_hotels import update_hotel
+
 class LoginApp:
     def __init__(self, root):
         self.root = root
@@ -160,6 +162,7 @@ def register_user(username, password, email):
     else:
         return "Connection failed"
 
+
 class MainApp:
     def __init__(self, root, is_admin):
         self.root = root
@@ -188,12 +191,102 @@ class MainApp:
         # Create buttons for each functionality
         ttk.Button(button_frame, text="Hotel Booking System", command=self.open_hotel_booking_window).pack(pady=10, fill="x")
         ttk.Button(button_frame, text="Process Payment", command=self.open_payment_window).pack(pady=10, fill="x")
-        ttk.Button(button_frame, text="Add Review", command=self.open_review_window).pack(pady=10, fill="x")
-
+        
         if self.is_admin:
+            ttk.Button(button_frame, text="View Reviews", command=self.view_reviews).pack(pady=10, fill="x")
             ttk.Button(button_frame, text="View Records", command=self.open_records_window).pack(pady=10, fill="x")
             ttk.Button(button_frame, text="View Late Checkouts", command=self.open_fines_window).pack(pady=10, fill="x")
+            ttk.Button(button_frame, text="Update Hotel Details", command=self.open_hotel_update_window).pack(pady=10, fill="x")
+        else:
+            ttk.Button(button_frame, text="Add Review", command=self.open_review_window).pack(pady=10, fill="x")
 
+    def open_hotel_update_window(self):
+      update_window = tk.Toplevel(self.root)
+      update_window.title("Hotel Management")
+      update_window.geometry("400x500")
+
+      frame = ttk.Frame(update_window, padding="20")
+      frame.pack(fill=tk.BOTH, expand=True)
+
+      ttk.Label(frame, text="Hotel ID" ).pack(pady=5)
+      hotel_id_entry = ttk.Entry(frame)
+      hotel_id_entry.pack(pady=5)
+
+      ttk.Label(frame, text="Hotel Name:").pack(pady=5)
+      name_entry = ttk.Entry(frame)
+      name_entry.pack(pady=5)
+
+      ttk.Label(frame, text="Hotel Address:").pack(pady=5)
+      address_entry = ttk.Entry(frame)
+      address_entry.pack(pady=5)
+
+      ttk.Label(frame, text="City:").pack(pady=5)
+      city_entry = ttk.Entry(frame)
+      city_entry.pack(pady=5)
+
+      ttk.Label(frame, text="State:").pack(pady=5)
+      state_entry = ttk.Entry(frame)
+      state_entry.pack(pady=5)
+
+      ttk.Label(frame, text="Country:").pack(pady=5)
+      country_entry = ttk.Entry(frame)
+      country_entry.pack(pady=5)
+
+      ttk.Label(frame, text="Zip Code:").pack(pady=5)
+      zipcode_entry = ttk.Entry(frame)
+      zipcode_entry.pack(pady=5)
+
+      ttk.Label(frame, text="Phone Number:").pack(pady=5)
+      phone_entry = ttk.Entry(frame)
+      phone_entry.pack(pady=5)
+
+      def get_hotel_details():
+        return {
+            'name': name_entry.get(),
+            'address': address_entry.get(),
+            'city': city_entry.get(),
+            'state': state_entry.get(),
+            'country': country_entry.get(),
+            'zipcode': zipcode_entry.get(),
+            'phone': phone_entry.get()
+            
+        }
+
+      def add_hotel():
+          details = get_hotel_details()
+          hotel_id = hotel_id_entry.get()
+          if not all(details.values()):
+            messagebox.showerror("Error", "Please fill in all fields.")
+            return
+          result = update_hotel(hotel_id, **details)
+          messagebox.showinfo("Result", result)
+
+      def update_existing_hotel():
+          hotel_id = hotel_id_entry.get()
+          if not hotel_id:
+            messagebox.showerror("Error", "Please enter a Hotel ID to update.")
+            return
+          details = get_hotel_details()
+          if not all(details.values()):
+            messagebox.showerror("Error", "Please fill in all fields.")
+            return
+          result = update_hotel(int(hotel_id), **details)
+          messagebox.showinfo("Result", result)
+
+      def delete_hotel():
+          hotel_id = hotel_id_entry.get()
+          if not hotel_id:
+            messagebox.showerror("Error", "Please enter a Hotel ID to delete.")
+            return
+          result = self.delete_hotel(int(hotel_id))
+          messagebox.showinfo("Result", result)
+
+      button_frame = ttk.Frame(frame)
+      button_frame.pack(pady=10)
+
+      ttk.Button(button_frame, text="Add Hotel", command=add_hotel).pack(side=tk.LEFT, padx=5)
+      ttk.Button(button_frame, text="Update Hotel", command=update_existing_hotel).pack(side=tk.LEFT, padx=5)
+      ttk.Button(button_frame, text="Delete Hotel", command=delete_hotel).pack(side=tk.LEFT, padx=5)
 
     def open_fines_window(self):
         from OYO_UI_for_Fines_function import display_fines
@@ -225,7 +318,62 @@ class MainApp:
         from Tkinter_Review_UI import ReviewApp
         review_window = tk.Toplevel(self.root)
         ReviewApp(review_window)
+   
+    def view_reviews(self):
+    # Create a new window to display reviews
+        reviews_window = tk.Toplevel(self.root)
+        reviews_window.title("View Reviews")
+        reviews_window.geometry("800x600")
 
+    # Create a frame to hold the reviews
+        frame = ttk.Frame(reviews_window, padding="20")
+        frame.pack(fill=tk.BOTH, expand=True)
+
+    # Create a scrollable text widget to display reviews
+        text_widget = tk.Text(frame, wrap=tk.WORD, width=80, height=20)
+        text_widget.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        scrollbar = ttk.Scrollbar(frame, orient="vertical", command=text_widget.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        text_widget.configure(yscrollcommand=scrollbar.set)
+
+    # Retrieve and display reviews
+        connection = create_connection()
+        if connection:
+            try:
+                cursor = connection.cursor()
+                query = """
+            SELECT u.user_name, h.HotelName, r.rating, r.comment, r.complaint, r.review_date 
+            FROM Review r
+            JOIN Users u ON r.user_id = u.user_id
+            JOIN Hotel h ON r.HotelID = h.HotelID
+            ORDER BY r.review_date DESC
+            """
+                cursor.execute(query)
+                reviews = cursor.fetchall()
+
+                for review in reviews:
+                    user_name, hotel_name, rating, comment, complaint, review_date = review
+                    text_widget.insert(tk.END, f"User: {user_name}\n")
+                    text_widget.insert(tk.END, f"Hotel: {hotel_name}\n")
+                    text_widget.insert(tk.END, f"Rating: {rating}/5\n")
+                    text_widget.insert(tk.END, f"Comment: {comment}\n")
+                    if complaint:
+                        text_widget.insert(tk.END, f"Complaint: {complaint}\n")
+                        text_widget.insert(tk.END, f"Date: {review_date}\n\n")
+
+                text_widget.configure(state='disabled')  # Make the text widget read-only
+
+            except Error as e:
+                messagebox.showerror("Database Error", f"Error retrieving reviews: {e}")
+            finally:
+                cursor.close()
+                connection.close()
+        else:
+            messagebox.showerror("Connection Error", "Failed to connect to the database")    
+    
+    
 if __name__ == "__main__":
     root = tk.Tk()
     app = LoginApp(root)
